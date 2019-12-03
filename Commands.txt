@@ -1,0 +1,34 @@
+FREQ:START 1MHZ % Define start frequency
+FREQ:START? % Query start frequency
+
+FREQ:STOP 2MHZ % Define stop frequency
+FREQ:STOP? % Query stop frequency
+
+FREQUENCY:CENTER 120MHz % Define Centre Frequency
+FREQ:CENT? % Read Centre Frequency
+
+FREQUENCY:SPAN 10MHZ % Define the Frequency Span
+FREQ:SPAN? % Read Frequency Span
+
+% Will need to check if peak can be read when reference level is too low
+DISPLAY:TRACE:Y:RLEVEL -10dBm % Define power reference level
+DISP:TRAC:Y:RLEV? % Read Reference Level
+
+% Need two commands to initiate peak search
+CALC:MARKER ON;MARKER:MAX % Turn on the marker, locate the max value
+CALC:MARK:X?;Y? % Request frequency and level
+
+% look into the initialisation of the whole system
+% Read help on these commands
+INIT:CONT OFF;
+INIT:IMM; 
+INIT;*OPC
+INIT:IMM;*WAI
+
+% What units are currently being used? 
+UNIT:POW? % Query the units
+UNIT:POW DBM|WATT|VOLT
+
+% Possible to read the trace directly from the instrument, not useful at this point
+FORM:DATA REAL,32 % probably something like format the data as real 32 bit
+TRACE? TRACE1 % probably query contents of trace1
