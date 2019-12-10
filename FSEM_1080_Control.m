@@ -6,15 +6,19 @@
 addpath(genpath('c:/Users/Robert/Programming/MATLAB/Common/'))
 addpath(genpath('c:/Users/Robert/Programming/MATLAB/Rohde_Schwarz_ESA/'))
 
+% It seems that vinfo = instrhwinfo('visa','keysight');
+% followed by vinfo.ObjectConstructorName can tell you what's communicating
+% with the machine
+
 %  Specify resource name and vendor of driver
 fsem_addr = 'GPIB1::28::INSTR';
-fsem_vendor = 'NI';
+fsem_vendor = 'ni';
 
 % Open VISA connection and set parameters for FSEM 1080
-visObj = visa (fsem_vendor, fsem_addr);
+visObj = visa('ni', 'GPIB1::28::INSTR');
 fopen (visObj);
-set (visObj, 'Timeout', 10);
-set (visObj, 'EOSMode', 'read');
+%set (visObj, 'Timeout', 10);
+%set (visObj, 'EOSMode', 'read');
 
 % Check that all this is working
 % Then add the option to define the length of the frequency scan from the
@@ -28,14 +32,14 @@ fUnit = 'GHz';
 FSEM_1080_Configure(visObj, fLow, fHigh, fUnit); 
 
 % Perform frequency sweep over some time interval
-Tduration = 60; % duration defined in seconds 
+Tduration = 30; % duration defined in seconds 
 Tincre = 1; % time between measurements defined in seconds
 swp_data = FSEM_1080_FSweep(visObj, Tduration, Tincre); 
 
-if size(swp_data(1)) > 1 && size(swp_data(2)) > 1
+if length(swp_data(:,1)) > 1 && length(swp_data(:,2)) > 1
     % make a plot of the measured data
     figure
-    plot(swp_data(1), swp_data(2), 'g--o')
+    plot(swp_data(:,1), swp_data(:,2), 'g--o')
     xlabel('Time (s)')
     ylabel('Frequency (GHz)')
 end

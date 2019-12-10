@@ -5,7 +5,7 @@ function v = FSEM_1080_FSweep(visObj, Tduration, Tincre)
 
 swps = Validate_Sweep_Params(0.0, Tduration, Tincre);
 
-if swps(1) == True
+if swps(1) == 1
     disp('Sweep can proceed');
     
     Tvals = zeros(swps(2), 1);
@@ -19,13 +19,21 @@ if swps(1) == True
         Fvals(i) = reading(1); 
         Pvals(i) = reading(2); 
         time = time + Tincre; 
+        pause(Tincre); 
     end
     
-    v = [Tvals, Fvals, Pvals]; 
+    %v = [Tvals, Fvals, Pvals];
+    v = zeros(swps(2),3); 
+    v(:,1) = Tvals; 
+    v(:,2) = Fvals; 
+    v(:,3) = Pvals; 
 else
     disp('Sweep cannot proceed');
     disp('Sweep parameters not valid');
-    v = [zeros(1,1), zeros(1,1), zeros(1,1)]; 
+    v = zeros(3,3); 
+    v(:,1) = zeros(3, 1); 
+    v(:,2) = zeros(3, 1); 
+    v(:,3) = zeros(3, 1);
 end
 
 end
