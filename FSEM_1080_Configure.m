@@ -6,7 +6,7 @@ function FSEM_1080_Configure(visObj, fLow, fHigh, fUnit)
 
 fprintf (visObj, 'UNIT:POW DBM'); % Tell the ESA what power units to use on vertical scale
 
-fprintf (visObj, 'DISP:TRAC:Y:RLEV 0dBm'); % Tell the ESA what the reference level should be
+fprintf (visObj, 'DISP:TRAC:Y:RLEV -10dBm'); % Tell the ESA what the reference level should be
 
 FSEM_1080_FLimits(visObj, fLow, fHigh, fUnit); 
 

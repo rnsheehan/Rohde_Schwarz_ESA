@@ -44,8 +44,8 @@ fUnit = 'GHz';
 FSEM_1080_Configure(visObj, fLow, fHigh, fUnit); 
 
 % Perform frequency sweep over some time interval
-Tduration = 60; % duration defined in seconds 
-Tincre = 0.5; % time between measurements defined in seconds
+Tduration = 30; % duration defined in seconds 
+Tincre = 1; % time between measurements defined in seconds
 swp_data = FSEM_1080_FSweep(visObj, Tduration, Tincre); 
 
 % send the sweep data to a file
@@ -56,7 +56,8 @@ if length(swp_data(:,1)) > 1 && length(swp_data(:,2)) > 1
     figure
     plot(swp_data(:,1), swp_data(:,2), 'g--o')
     xlabel('Time (s)')
-    ylabel('Frequency (GHz)')    
+    ylabel('Frequency (GHz)')
+    
 end
 
 % Close VISA connection

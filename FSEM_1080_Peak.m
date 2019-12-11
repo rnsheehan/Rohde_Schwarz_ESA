@@ -9,6 +9,7 @@ fprintf (visObj, 'CALC:MARKER ON;MARKER:MAX'); % Turn on the marker, locate the 
 freq = str2double (query (visObj, 'CALC:MARK:X?')); % Request frequency and level
 power = str2double (query (visObj, 'CALC:MARK:Y?')); % Request power level
 
+% scale freq value to GHz
 v = [(freq/1.0E+9), power]; 
 
 end

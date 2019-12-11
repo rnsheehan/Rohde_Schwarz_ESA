@@ -8,25 +8,31 @@ swps = Validate_Sweep_Params(0.0, Tduration, Tincre);
 if swps(1) == 1
     disp('Sweep can proceed');
     
-    Tvals = zeros(swps(2), 1);
-    Fvals = zeros(swps(2), 1);
-    Pvals = zeros(swps(2), 1);
+    %Tvals = zeros(swps(2), 1); % Make an array of swps(2) rows and 1 column
+    %Fvals = zeros(swps(2), 1); % Make an array of swps(2) rows and 1 column
+    %Pvals = zeros(swps(2), 1); % Make an array of swps(2) rows and 1 column
+    
+    v = zeros(swps(2),3); % Make an array of swps(2) rows and 3 column
     
     time = 0.0; 
     for i=1:swps(2)
-        Tvals(i) = time; 
+        %Tvals(i) = time; 
+        v(i,1) = time; 
         reading = FSEM_1080_Peak(visObj); 
-        Fvals(i) = reading(1); 
-        Pvals(i) = reading(2); 
+        %Fvals(i) = reading(1); 
+        %Pvals(i) = reading(2); 
+        v(i,2) = reading(1); 
+        v(i,3) = reading(2); 
         time = time + Tincre; 
-        pause(Tincre); 
+        pause(Tincre); % pause between measurements
     end
     
-    %v = [Tvals, Fvals, Pvals];
-    v = zeros(swps(2),3); 
-    v(:,1) = Tvals; 
-    v(:,2) = Fvals; 
-    v(:,3) = Pvals; 
+    disp('Sweep complete');
+    
+    % No sense in storing the data twice
+    %v(:,1) = Tvals; % store data in column 1
+    %v(:,2) = Fvals; % store data in column 2
+    %v(:,3) = Pvals; % store data in column 3
 else
     disp('Sweep cannot proceed');
     disp('Sweep parameters not valid');
