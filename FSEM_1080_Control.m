@@ -6,6 +6,10 @@
 addpath(genpath('c:/Users/Robert/Programming/MATLAB/Common/'))
 addpath(genpath('c:/Users/Robert/Programming/MATLAB/Rohde_Schwarz_ESA/'))
 
+HOME = pwd; 
+
+DATA_HOME = 'c:\Users\Robert\Research\CAPPA\Data\ESA_Test\';
+
 % It seems that vinfo = instrhwinfo('visa','keysight');
 % followed by vinfo.ObjectConstructorName can tell you what's communicating
 % with the machine
@@ -39,24 +43,44 @@ set (visObj, 'EOSMode', 'read');
 % Configure the ESA for operation
 % What are the limits for the SRS Sig Gen? 
 fLow = 0.1;
-fHigh = 10.0; 
+fHigh = 18.0; % this is the current bandwidth limit on the DC block attached to the ESA
 fUnit = 'GHz'; 
 FSEM_1080_Configure(visObj, fLow, fHigh, fUnit); 
+
+% Read the TLS wavelength from the user
+lambdaTLS = input('Input TLS wavelength: ');
+
+freq_data_file = strcat('F_Swp_LTLS_',strrep(num2str(lambdaTLS),'.','_'),'.txt'); 
 
 % Perform frequency sweep over some time interval
 Tduration = 60; % duration defined in seconds 
 Tincre = 0.5; % time between measurements defined in seconds
-swp_data = FSEM_1080_FSweep(visObj, Tduration, Tincre); 
+swp_data = FSEM_1080_FSweep(visObj, Tduration, Tincre);
 
 % send the sweep data to a file
-dlmwrite('F_Sweep_Data.txt', swp_data, 'delimiter', ',', 'precision', '%0.5f')
+cd DATA_HOME
+dlmwrite(freq_data_file, swp_data, 'delimiter', ',', 'precision', '%0.5f')
+cd HOME
 
-if length(swp_data(:,1)) > 1 && length(swp_data(:,2)) > 1
-    % make a plot of the measured data
-    figure
-    plot(swp_data(:,1), swp_data(:,2), 'g--o')
-    xlabel('Time (s)')
-    ylabel('Frequency (GHz)')    
+fbar = mean(swp_data(:,2)); 
+fstdev = std(swp_data(:,2)); 
+frange = 0.5*(max(swp_data(:,2)) - min(swp_data(:,2))); 
+
+disp('Measurement Results');
+disp('<f> / GHz, \sigma_{f} / GHz, \delta f / GHz')
+disp( strcat(num2str(fbar), ', ', num2str(fstdev), ', ', num2str(frange)) ); 
+
+% Make the plot if you want
+MAKE_PLOT = 1;
+
+if MAKE_PLOT
+    if length(swp_data(:,1)) > 1 && length(swp_data(:,2)) > 1
+        % make a plot of the measured data
+        figure
+        plot(swp_data(:,1), swp_data(:,2), 'g--o')
+        xlabel('Time (s)')
+        ylabel('Frequency (GHz)')    
+    end
 end
 
 % Close VISA connection
