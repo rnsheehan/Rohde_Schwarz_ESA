@@ -16,7 +16,7 @@ if c1 && c2
 else
     % apply default limits
     fprintf (visObj, 'FREQ:START 10MHz');
-    fprintf (visObj, 'FREQ:STOP 10GHz');
+    fprintf (visObj, 'FREQ:STOP 25GHz');
 end
 
 end % end sub-routine

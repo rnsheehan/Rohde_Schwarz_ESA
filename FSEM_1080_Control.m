@@ -8,7 +8,7 @@ addpath(genpath('c:/Users/Robert/Programming/MATLAB/Rohde_Schwarz_ESA/'))
 
 HOME = pwd; 
 
-DATA_HOME = 'c:\Users\Robert\Research\CAPPA\Data\ESA_Test\';
+DATA_HOME = 'C:\Users\Robert\Research\CAPPA\DATA\ESA_Test';
 
 % It seems that vinfo = instrhwinfo('visa','keysight');
 % followed by vinfo.ObjectConstructorName can tell you what's communicating
@@ -43,14 +43,14 @@ set (visObj, 'EOSMode', 'read');
 % Configure the ESA for operation
 % What are the limits for the SRS Sig Gen? 
 fLow = 0.1;
-fHigh = 18.0; % this is the current bandwidth limit on the DC block attached to the ESA
+fHigh = 25.0; % this is the current bandwidth limit on the DC block attached to the ESA
 fUnit = 'GHz'; 
-FSEM_1080_Configure(visObj, fLow, fHigh, fUnit); 
+FSEM_1080_Configure(visObj, fLow, fHigh, fUnit); % Stop Frequency is not
 
 % Read the TLS wavelength from the user
 lambdaTLS = input('Input TLS wavelength: ');
 
-freq_data_file = strcat('F_Swp_LTLS_',strrep(num2str(lambdaTLS),'.','_'),'.txt'); 
+freq_data_file = strcat(DATA_HOME,'\F_Swp_LTLS_',strrep(num2str(lambdaTLS),'.','_'),'.txt'); 
 
 % Perform frequency sweep over some time interval
 Tduration = 60; % duration defined in seconds 
@@ -58,9 +58,9 @@ Tincre = 0.5; % time between measurements defined in seconds
 swp_data = FSEM_1080_FSweep(visObj, Tduration, Tincre);
 
 % send the sweep data to a file
-cd DATA_HOME
+%cd DATA_HOME
 dlmwrite(freq_data_file, swp_data, 'delimiter', ',', 'precision', '%0.5f')
-cd HOME
+%cd HOME
 
 fbar = mean(swp_data(:,2)); 
 fstdev = std(swp_data(:,2)); 
