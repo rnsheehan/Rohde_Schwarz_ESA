@@ -9,7 +9,7 @@ function FSEM_1080_FLimits(visObj, fLow, fHigh, fUnit)
 c1 = strcmp(fUnit,'MHZ') || strcmp(fUnit,'GHZ'); % ensure units are correctly defined
 c2 = fLow < fHigh; % ensure limits are correctly defined
 
-if c1 && c2
+if (c1 && c2)
     % assign the frequency scan limits
     fprintf (visObj, ['FREQ:START ', num2str(fLow), fUnit]);
     fprintf (visObj, ['FREQ:STOP ', num2str(fHigh), fUnit]);
